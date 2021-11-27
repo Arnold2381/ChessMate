@@ -1,0 +1,78 @@
+body {
+  background-color: #0d0914;
+}
+.ellipse {
+  position: absolute;
+  width: 686px;
+  height: 686px;
+  left: -213px;
+  top: -209px;
+
+  background: linear-gradient(
+    204.28deg,
+    rgba(35, 106, 242, 0.2) 13.34%,
+    rgba(84, 222, 231, 0.2) 50.34%,
+    rgba(182, 255, 124, 0.2) 92.27%
+  );
+  filter: blur(500px);
+}
+.logo {
+  position: absolute;
+  width: 166px;
+  height: 35px;
+  left: 58px;
+  top: 54px;
+}
+.headline {
+  position: absolute;
+  width: 421px;
+  height: 168px;
+  left: 140px;
+  top: 216px;
+
+  font-family: SF Pro Display;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 70px;
+  line-height: 84px;
+
+  color: #ffffff;
+}
+.submit {
+  position: absolute;
+  width: 189px;
+  height: 61px;
+  left: 140px;
+  top: 429px;
+  background: linear-gradient(94.39deg, #7d3afb 0%, #e85cf3 105.9%);
+  border-radius: 15px;
+  align-items: center;
+  cursor: pointer;
+}
+.submittext {
+  font-family: SF Pro Display;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 23px;
+
+  margin-top: 50%;
+  margin-left: 20%;
+  color: #ffffff;
+}
+.card {
+  position: absolute;
+  width: 418.51px;
+  height: 200.88px;
+  left: 900px;
+  top: 216px;
+  background-image: url('../logos/card.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.kings {
+  position: absolute;
+  width: 318.43px;
+  height: 376px;
+  left: 682px;
+  top: 244px;
+}
