@@ -1,12 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Dashboard from './pages/Dashboard';
+import Game from './pages/Game';
+import Landing from './pages/Landing';
 
 function App() {
   return (
-    <div className='App'>
-      <h1 className='text-2xl text-green-600'>Test</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Landing />}></Route>
+        <Route path='/dashboard' element={<Dashboard />}></Route>
+        <Route path='/game' element={<Game />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
