@@ -6,6 +6,8 @@ import Game from './pages/Game';
 import Landing from './pages/Landing';
 
 function App() {
+  const [games, setGames] = React.useState([]);
+
   return (
     <BrowserRouter>
       <Routes>

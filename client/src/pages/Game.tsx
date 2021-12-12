@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import chessLogo from '../assets/chessLogo.svg';
 import Board from '../components/Board';
 import purple from '../assets/purple.png';
@@ -6,8 +6,40 @@ import green from '../assets/green.png';
 import Match from '../components/Match';
 import Chat from '../components/Chat';
 import Notation from '../components/Notation';
+import io from 'socket.io-client';
+import { ChessInstance } from 'chess.js';
+const Chess = require('chess.js');
 
 const Game = () => {
+  const [chess] = useState<ChessInstance>(
+    new Chess('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+  );
+
+  const [fen, setFen] = useState(chess.fen());
+
+  var socket = io('http://localhost:5000/', { transports: ['websocket'] });
+
+  var handleMove = function (mov: any) {
+    var move = chess.move({ from: mov.from, to: mov.to });
+    if (move === null) return 'snapback';
+
+    setFen(chess.fen());
+    socket.emit('move', move);
+  };
+
+  const move = (move: any) => {
+    handleMove({
+      from: move.sourceSquare,
+      to: move.targetSquare,
+      promotion: 'q',
+    });
+  };
+
+  socket.on('move', function (msg: any) {
+    chess.move(msg);
+    setFen(chess.fen);
+  });
+
   return (
     <div className='h-screen py-24 flex justify-center items-center bg-bgBlack w-screen relative'>
       <img
@@ -37,7 +69,7 @@ const Game = () => {
         {/* Chessboard */}
         <div className='h-full flex justify-center items-center w-full'>
           <div className='bg-white border-8 border-white rounded-lg'>
-            <Board />
+            <Board move={move} fen={fen} />
           </div>
         </div>
         {/* Chessboard */}

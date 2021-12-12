@@ -13,10 +13,11 @@ import whiteB from '../assets/pieces/whiteB.svg';
 import whiteQ from '../assets/pieces/whiteQ.svg';
 import whiteP from '../assets/pieces/whiteP.svg';
 
-const Board = () => {
+const Board = (props: any) => {
   return (
     <Chessboard
       width={530}
+      onDrop={props.move}
       darkSquareStyle={{
         backgroundColor: '#B7C0D8',
         position: 'relative',
@@ -161,7 +162,7 @@ const Board = () => {
           />
         ),
       }}
-      position='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+      position={props.fen}
     />
   );
 };
