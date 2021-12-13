@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import '../css/Homepage.css';
 import Logo from '../logos/logo_home.svg';
-import King from '../logos/kings.svg';
+import king from '../assets/king.svg';
 import { ethers } from 'ethers';
+import { useStateValue } from '../store/stateProvidet';
 
 const Landing = () => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
@@ -11,11 +13,23 @@ const Landing = () => {
   const [userBalance, setUserBalance] = useState<any>(null);
   const [connButtonText, setConnButtonText] = useState<any>(false);
 
-  const connectWalletHandler = () => {
+  const history = useHistory();
+
+  const [{ id, balance }, dispatch] = useStateValue();
+  useEffect(() => {
+    console.log(defaultAccount, userBalance);
+
+    dispatch({
+      type: 'SET_USER',
+      id: defaultAccount,
+      balance: userBalance,
+    });
+  }, [defaultAccount, userBalance]);
+  const connectWalletHandler = async () => {
     if ((window as any).ethereum && (window as any).ethereum.isMetaMask) {
       console.log('MetaMask Here!');
 
-      (window as any).ethereum
+      await (window as any).ethereum
         .request({ method: 'eth_requestAccounts' })
         .then((result: any[]) => {
           accountChangedHandler(result[0]);
@@ -34,7 +48,7 @@ const Landing = () => {
   };
 
   // update account, will cause component re-render
-  const accountChangedHandler = (newAccount: { toString: () => any }) => {
+  const accountChangedHandler = async (newAccount: { toString: () => any }) => {
     setDefaultAccount(newAccount);
     getAccountBalance(newAccount.toString());
   };
@@ -61,20 +75,46 @@ const Landing = () => {
   (window as any).ethereum.on('chainChanged', chainChangedHandler);
   return (
     <div>
-      <div className="ellipse"></div>
-      <img src={Logo} className="logo" />
-      <div className="headline">Play Like Never Before</div>
+      <div className='ellipse'></div>
+      <img src={Logo} className='logo' />
+      {/* <div className='headline'>Play Like Never Before</div>
       <div
-        className="submit"
+        className='submit'
         onClick={() => {
           connectWalletHandler();
         }}
       >
-        <span className="submittext">Play Now</span>
-      </div>
+        <span className='submittext'>Play Now</span>
+      </div> */}
+      <div className='h-screen w-full flex items-center  justify-center'>
+        <div className='flex items-center gap-36 px-40'>
+          <div className='text-white'>
+            <div className='my-auto'>
+              <h1 className='text-7xl font-semibold'>Play like a king</h1>
+              <p className='text-xl my-8 opacity-80'>
+                ChessMate aims to increase the excitement of the chess game by
+                making it more exciting and competitive with winner takes all
+                matches.
+                {defaultAccount}
+              </p>
+              <div className='mt-14'>
+                <span
+                  onClick={async () => {
+                    await connectWalletHandler();
+                    console.log(defaultAccount, userBalance);
 
-      <div className="card">
-        <img src={King} className="king"></img>
+                    history.push('/dash');
+                  }}
+                  className='rounded-xl transform  py-4 px-6 font-semibold cursor-pointer landingCTA text-lg'
+                >
+                  Start Playing
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <img src={king} className='' alt='' />
+        </div>
       </div>
     </div>
   );

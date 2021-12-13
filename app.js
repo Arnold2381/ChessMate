@@ -13,9 +13,11 @@ http.listen(port, function () {
 var io = require('socket.io')(http);
 
 io.on('connection', function (socket) {
+  const clients = io.sockets.adapter.rooms.get('play');
+  console.log(clients);
   console.log('new connection');
-
   socket.on('move', function (msg) {
+    socket.join(msg.roomid);
     socket.broadcast.emit('move', msg);
   });
 });

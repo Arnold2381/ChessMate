@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import Dashboard from './pages/Dashboard';
 import Game from './pages/Game';
@@ -9,13 +9,19 @@ function App() {
   const [games, setGames] = React.useState([]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
-        <Route path="/game" element={<Game />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <Switch>
+        <Route exact path='/'>
+          <Landing />
+        </Route>
+        <Route exact path='/dash'>
+          <Dashboard />
+        </Route>
+        <Route exact path='/game'>
+          <Game />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

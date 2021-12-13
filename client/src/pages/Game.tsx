@@ -18,13 +18,13 @@ const Game = () => {
   const [fen, setFen] = useState(chess.fen());
 
   var socket = io('http://localhost:5000/', { transports: ['websocket'] });
-
+  const [roomid, setRoomid] = useState('play');
   var handleMove = function (mov: any) {
     var move = chess.move({ from: mov.from, to: mov.to });
     if (move === null) return 'snapback';
 
     setFen(chess.fen());
-    socket.emit('move', move);
+    socket.emit('move', { move: move, roomid: roomid });
   };
 
   const move = (move: any) => {
@@ -36,9 +36,15 @@ const Game = () => {
   };
 
   socket.on('move', function (msg: any) {
-    chess.move(msg);
-    setFen(chess.fen);
+    if (msg.roomid === roomid) {
+      chess.move(msg.move);
+      setFen(chess.fen);
+    }
   });
+
+  const handleChange = (event: any) => {
+    setRoomid(event.target.value);
+  };
 
   return (
     <div className='h-screen py-24 flex justify-center items-center bg-bgBlack w-screen relative'>
@@ -87,6 +93,9 @@ const Game = () => {
           </div>
         </div>
         {/* rightbar */}
+      </div>
+      <div className='absolute top-0 z-50'>
+        <input onChange={handleChange}></input>
       </div>
     </div>
   );

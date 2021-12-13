@@ -16,6 +16,10 @@ body {
   );
   filter: blur(500px);
 }
+
+.landingCTA {
+  background: linear-gradient(94.39deg, #7d3afb 0%, #e85cf3 105.9%);
+}
 .logo {
   position: absolute;
   width: 166px;
