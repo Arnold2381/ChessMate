@@ -8,34 +8,61 @@ import Chat from '../components/Chat';
 import Notation from '../components/Notation';
 import io from 'socket.io-client';
 import { ChessInstance } from 'chess.js';
+import { useLocation } from 'react-router-dom';
+import { useStateValue } from '../store/stateProvidet';
+import Firebase from '../config';
+
 const Chess = require('chess.js');
 
 const Game = () => {
+  const [{ id, balance }, dispatch] = useStateValue();
+  const [color, setUserColor] = useState('white');
+  const [active, setActive] = useState('white');
   const [chess] = useState<ChessInstance>(
     new Chess('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
   );
+  const location = useLocation() as any;
 
   const [fen, setFen] = useState(chess.fen());
 
   var socket = io('http://localhost:5000/', { transports: ['websocket'] });
   const [roomid, setRoomid] = useState('play');
+  React.useEffect(() => {
+    setRoomid(location.state.id);
+    let ref = Firebase.database().ref('Games/' + id);
+    ref.on('value', (snapshot: any) => {
+      const state = snapshot.val();
+      setUserColor(state.color);
+    });
+  }, []);
   var handleMove = function (mov: any) {
     var move = chess.move({ from: mov.from, to: mov.to });
+
     if (move === null) return 'snapback';
 
     setFen(chess.fen());
+    console.log(fen);
     socket.emit('move', { move: move, roomid: roomid });
+    if (chess.game_over()) {
+      alert('Game Over');
+    }
   };
 
   const move = (move: any) => {
-    handleMove({
-      from: move.sourceSquare,
-      to: move.targetSquare,
-      promotion: 'q',
-    });
+    if (
+      (fen.includes('w') && color === 'black') ||
+      (!fen.includes('w') && color === 'white')
+    ) {
+      handleMove({
+        from: move.sourceSquare,
+        to: move.targetSquare,
+        promotion: 'q',
+      });
+    }
   };
 
   socket.on('move', function (msg: any) {
+    console.log(msg.roomid);
     if (msg.roomid === roomid) {
       chess.move(msg.move);
       setFen(chess.fen);

@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { HiClipboard } from 'react-icons/hi';
+import { useHistory } from 'react-router-dom';
 import Firebase from '../config';
 
 const Modal = (props: any) => {
+  const history = useHistory();
   const handleCopy = () => {
     navigator.clipboard.writeText(props.id);
   };
@@ -20,8 +22,10 @@ const Modal = (props: any) => {
           .ref('Games/' + gameid)
           .set({
             count: 2,
+            color: 'black',
           })
           .catch(alert);
+        history.push({ pathname: '/game', state: { id: gameid } });
       }
     });
   };
@@ -81,6 +85,11 @@ const Modal = (props: any) => {
                 </span>
               </span>
             </div>
+
+            <p className='mt-12 text-xl text-white text-center'>
+              Waiting for your opponent to join
+            </p>
+
             <p className='mt-12 text-xl text-white text-center'>
               or
               <span

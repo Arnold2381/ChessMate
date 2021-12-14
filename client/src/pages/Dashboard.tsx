@@ -4,21 +4,46 @@ import knight from '../assets/knight.svg';
 import Modal from '../components/Modal';
 import Firebase from '../config';
 import { useStateValue } from '../store/stateProvidet';
+import { useHistory } from 'react-router-dom';
 const Dashboard = () => {
   const [modal, setModal] = React.useState(false);
   const [modalType, setModalType] = React.useState('join');
   const [{ id, balance }, dispatch] = useStateValue();
+
+  const [players, setPlayers] = React.useState(0);
+
+  const history = useHistory();
 
   const handleAdd = () => {
     Firebase.database()
       .ref('Games/' + id)
       .set({
         count: 1,
+        color: 'white',
       })
       .catch(alert);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (players === 2) {
+      history.push({ pathname: '/game', state: { id: id } });
+    }
+  }, [players]);
+
+  const handleFetch = () => {
+    let ref = Firebase.database().ref('Games/' + id);
+    ref.on('value', (snapshot: any) => {
+      const state = snapshot.val();
+      if (state != null) {
+        console.log(state.count);
+        setPlayers(state.count);
+      }
+    });
+  };
+
+  useEffect(() => {
+    handleFetch();
+  }, []);
   // const getUserData = () => {
   //   let ref = firebase.database().ref('/');
   //   ref.on('value', (snapshot: any) => {
