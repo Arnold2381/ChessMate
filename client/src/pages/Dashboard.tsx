@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Logo from '../logos/logo_home.svg';
 import knight from '../assets/knight.svg';
 import Modal from '../components/Modal';
+import Web3 from 'web3';
 import Firebase from '../config';
 import { useStateValue } from '../store/stateProvidet';
 import { useHistory } from 'react-router-dom';

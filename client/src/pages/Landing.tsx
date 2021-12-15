@@ -6,7 +6,7 @@ import Logo from '../logos/logo_home.svg';
 import king from '../assets/king.svg';
 import { ethers } from 'ethers';
 import { useStateValue } from '../store/stateProvidet';
-
+import Web3 from 'web3';
 const Landing = () => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [defaultAccount, setDefaultAccount] = useState<any>(null);
@@ -25,6 +25,7 @@ const Landing = () => {
       balance: userBalance,
     });
   }, [defaultAccount, userBalance]);
+
   const connectWalletHandler = async () => {
     if ((window as any).ethereum && (window as any).ethereum.isMetaMask) {
       console.log('MetaMask Here!');
